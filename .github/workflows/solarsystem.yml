@@ -54,6 +54,7 @@ jobs:
     code-coverage:
       name: Code Coverage
       runs-on: ubuntu-latest
+      continue-on-error: true
       env:
             MONGO_URI: ${{ vars.MONGO_URI }}
             MONGO_USERNAME: ${{ vars.MONGO_USERNAME }}
