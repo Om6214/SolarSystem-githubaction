@@ -31,4 +31,4 @@ jobs:
             - name: list the files and folder
               run: |
                 sudo apt-get update && sudo apt-get install -y tree
-                tree -L 3
+                tree -L 3 -I 'node_modules'
