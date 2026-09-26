@@ -73,6 +73,7 @@ jobs:
           run: npm run coverage
 
         - name: Archive coverage Repository
+          if: always()
           uses: actions/upload-artifact@v7
           with:
             name: Code coverage report
