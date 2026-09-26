@@ -6,6 +6,7 @@ on:
             - 'feature/*'
 jobs:
     unit-testing:
+        name: Unit Testing
         runs-on: ubuntu-latest
         env:
             MONGO_URI: ${{ vars.MONGO_URI }}
@@ -48,3 +49,27 @@ jobs:
                 name: Mocha-Test-Result
                 path: test-results.xml
                 if-no-files-found: ignore
+
+
+    code-coverage:
+      name: Code Coverage
+      runs-on: ubuntu-latest
+      steps:
+        - name: checkout the Repository
+          uses: actions/checkout@v6
+
+        - name: Setup Node js
+          uses: actions/setup-node@v7
+
+        - name: Install Dependency
+          run: npm install
+
+        - name: Start the code coverage 
+          run: npm run coverage
+
+        - name: Archive coverage Repository
+          uses: actions/upload-artifact@v7
+          with:
+            name: Code coverage report
+            path: coverage
+            retention-days: 5
