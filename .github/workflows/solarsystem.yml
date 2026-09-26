@@ -32,3 +32,19 @@ jobs:
               run: |
                 sudo apt-get update && sudo apt-get install -y tree
                 tree -L 3 -I 'node_modules'
+
+            - name: Check if any file named test-results.xml exist or not
+              run: |
+                if [ -f test-results.xml ]
+                then
+                  echo "file exist"
+                else
+                  echo "file doesn't exist"
+                fi
+
+            - name: Archive test test-results.xml
+              uses: actions/upload-artifact@v3
+              with:
+                name: Mocha-Test-Result
+                path: test-results.xml
+                if-no-files-found: ignore
