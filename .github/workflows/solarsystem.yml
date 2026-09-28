@@ -124,7 +124,7 @@ jobs:
               -e MONGO_URI=$MONGO_URI \
               -e MONGO_USERNAME=$MONGO_USERNAME \
               -e MONGO_PASSWORD=$MONGO_PASSWORD \
-              $DOCKER_USERNAME/solarsystem:${{ github.sha }}
+              $DOCKER_USERNAME/solar-system:${{ github.sha }}
 
             echo "Verifying /live endpoint"
             wget -q -O - http://127.0.0.1:3000/live | grep live
