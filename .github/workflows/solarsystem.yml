@@ -106,9 +106,9 @@ jobs:
             username: ${{ vars.DOCKER_USERNAME }}
             password: ${{ secrets.DOCKER_TOKEN }}
 
-        - name: Build the image
-          run: docker build -t om6214/solarsystem-app:${{ github.sha }} .
-
-        - name: Push the image to docker hub
-          run: |
-            docker push om6214/solarsystem-app:${{ github.sha }}
+        - name: Build and push image
+          uses: docker/build-push-action@v5
+          with:
+            context: .
+            push: true
+            tags: om6214/solarsystem:${{ github.sha }}
