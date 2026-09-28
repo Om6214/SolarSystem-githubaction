@@ -93,6 +93,7 @@ jobs:
             retention-days: 5
 
     containerization:
+      needs: [unit-testing, code-coverage]
       name: containerization
       runs-on: ubuntu-latest
       steps:
@@ -109,4 +110,5 @@ jobs:
           run: docker build -t om6214:${{ github.sha }} .
 
         - name: Push the image to docker hub
-          run: docker push om6214:${{ github.sha }}
+          run: |
+            docker push om6214:${{ github.sha }}
