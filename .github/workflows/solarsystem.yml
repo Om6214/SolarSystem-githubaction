@@ -91,3 +91,22 @@ jobs:
             name: Code coverage report
             path: coverage
             retention-days: 5
+
+    containerization:
+      name: containerization
+      runs-on: ubuntu-latest
+      steps:
+        - name: Checkout the Repository
+          uses: actions/checkout@v6
+        
+        - name: Login into Docker hub
+          uses: docker/login-action@v4
+          with:
+            username: ${{ vars.DOCKER_USERNAME }}
+            password: ${{ secrets.DOCKER_TOKEN }}
+
+        - name: Build the image
+          run: docker build -t om6214:${{ github.sha }} .
+
+        - name: Push the image to docker hub
+          run: docker push om6214:${{ github.sha }}
