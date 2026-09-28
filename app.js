@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const path = require('path');
 const express = require('express');
 const OS = require('os');
@@ -20,8 +22,9 @@ mongoose.connect(process.env.MONGO_URI, {
     function(err) {
     if (err) {
         console.log("error!! " + err)
+        
     } else {
-      //  console.log("MongoDB Connection Successful")
+       console.log("MongoDB Connection Successful")
     }
 })
 

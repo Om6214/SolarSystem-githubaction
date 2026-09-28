@@ -96,6 +96,11 @@ jobs:
       needs: [unit-testing, code-coverage]
       name: containerization
       runs-on: ubuntu-latest
+      env:
+            MONGO_URI: ${{ vars.MONGO_URI }}
+            MONGO_USERNAME: ${{ vars.MONGO_USERNAME }}
+            MONGO_PASSWORD: ${{ secrets.MONGO_PASSWORD }}
+            DOCKER_USERNAME: ${{ vars.DOCKER_USERNAME }}
       steps:
         - name: Checkout the Repository
           uses: actions/checkout@v6
@@ -111,4 +116,17 @@ jobs:
           with:
             context: .
             push: true
-            tags: om6214/solarsystem:${{ github.sha }}
+            tags: ${{ vars.DOCKER_USERNAME }}/solar-system:${{ github.sha }}
+        - name: Testing the live endpoint
+          run: |
+            docker run --rm --name solar-system-app -d \
+              -p 3000:3000 \
+              -e MONGO_URI=$MONGO_URI \
+              -e MONGO_USERNAME=$MONGO_USERNAME \
+              -e MONGO_PASSWORD=$MONGO_PASSWORD \
+              $DOCKER_USERNAME/solarsystem:${{ github.sha }}
+
+            echo "Verifying /live endpoint"
+            wget -q -O - http://127.0.0.1:3000/live | grep live
+
+            echo "Endpoint working"
