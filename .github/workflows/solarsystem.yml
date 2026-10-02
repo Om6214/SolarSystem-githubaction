@@ -130,3 +130,22 @@ jobs:
             wget -q -O - http://127.0.0.1:3000/live | grep live
 
             echo "Endpoint working"
+
+    dev-deploy:
+      name: Deploy on Dev Environment
+      runs-on: ubuntu-latest
+      steps:
+        - name: Checkout code repo
+          uses: actions/checkout@v6
+
+        - name: Setup kubectl
+          uses: azure/setup-kubectl@v4
+          with:
+            version: 1.35
+
+        - name: Fetch kuberntes cluster details
+          run: |
+            kubectl version --short
+            echo "------------------------------------------------"
+            kubectl get nodes
+            
