@@ -95,6 +95,8 @@ jobs:
     containerization:
       needs: [unit-testing, code-coverage]
       name: containerization
+      outputs:
+        working_output: ${{ steps.working_output.output.work_out }}
       runs-on: ubuntu-latest
       env:
             MONGO_URI: ${{ vars.MONGO_URI }}
@@ -118,6 +120,7 @@ jobs:
             push: true
             tags: ${{ vars.DOCKER_USERNAME }}/solar-system:${{ github.sha }}
         - name: Testing the live endpoint
+          id: working_output
           run: |
             docker run --rm --name solar-system-app -d \
               -p 3000:3000 \
@@ -129,21 +132,16 @@ jobs:
             echo "Verifying /live endpoint"
             wget -q -O - http://127.0.0.1:3000/live | grep live
 
-            echo "Endpoint working"
+            echo "work_out=Endpoint working" >> "$GITHUB_OUTPUT"
 
-    dev-deploy:
-      name: Deploy on Dev Environment
+    
+    checkoutput:
+      name: Check the github outputs
       runs-on: ubuntu-latest
+      needs: containerization
       steps:
-        - name: Checkout code repo
-          uses: actions/checkout@v6
-
-        - name: Setup kubectl
-          uses: azure/setup-kubectl@v4
-
-        - name: Fetch kuberntes cluster details
+        - name: test the outputs
+          env:
+            OUTPUT: ${{ needs.containerization.outputs.working_output }}
           run: |
-            kubectl version
-            echo "------------------------------------------------"
-            kubectl get nodes
-
+            echo $OUTPUT
