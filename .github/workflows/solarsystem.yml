@@ -96,7 +96,7 @@ jobs:
       needs: [unit-testing, code-coverage]
       name: containerization
       outputs:
-        working_output: ${{ steps.working_output.output.work_out }}
+        working_output: ${{ steps.working_output.outputs.work_out }}
       runs-on: ubuntu-latest
       env:
             MONGO_URI: ${{ vars.MONGO_URI }}
